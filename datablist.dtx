@@ -1,0 +1,109 @@
+% \iffalse meta-comment
+% 
+% Copyright (C) 2013 by Carsten Burgard
+% 
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.2 of this license or (at your option) any later
+% version. The latest version of this license is in:
+% 
+%     http://www.latex-project.org/lppl.txt
+% 
+% and version 1.2 or later is part of all distributions of
+% LaTeX version 1999/12/01 or later.
+%
+% \fi
+%
+% \iffalse
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{datablist}
+%<package> [2012/05/23 v1.0 A minimalist package for easy, automatic data tables and lists]
+%
+%
+%<*driver>
+\documentclass{ltxdoc}
+\setlength{\parskip}{3pt}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand{\topfraction}{0.9}	
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+% \OnlyDescription
+\DocInput{datablist.dtx}
+\end{document}
+%</driver> 
+% \fi 
+% \CheckSum{0} 
+% \changes{v1.0}{2012/05/23}{Original Version}
+% \GetFileInfo {datablist.sty}
+% \DoNotIndex{\#,\$,\%,\&,\@,\\,\{,\},\^,\_,\~,\,,\=,\>}
+% \DoNotIndex{\@ne}
+% \DoNotIndex{\advance,\begingroup,\catcode,\closein}
+% \DoNotIndex{\closeout,\day,\def,\edef,\else,\empty,\endgroup}
+%
+% \title{The \textsf{ datablist } package
+% \thanks{This document corresponds to \textsf{datablist} ~\fileversion, dated~\filedate.}}
+%
+% \author{ Carsten Burgard \\ \texttt{ carsten.burgard@gmail.com }}
+%
+% \maketitle 
+%
+% \begin{abstract} 
+% One often encounters a situation where it seems useful to collect
+% \textit{data} (whatever that might mean) in some central place of
+% your document, say, a central table or list. This package provides a
+% minimalist solution to such needs.
+% \end {abstract}
+%
+% \section{Introduction} 
+% \LaTeX{} provides excellent capabilities when it comes to lists of
+% |table|s or |figure|s, as well as an elaborate table of
+% contents. Additional functionality is provided by the |tocloft|
+% package for restyling these or even introducing your own list of
+% |X|. This package provides similar functionality, but in a far less
+% elaborate, more flexible way. It provides you with two simple
+% functions |\adddataline| and |\getdatalines|.
+%
+% \section{Implementation}
+%
+%
+% \begin{macro}{\adddataline}
+% The |\adddataline{|\meta{data type}|}{|\meta{data}|}| macro is
+% merely a wrapper for the built-in \LaTeX{} |\addtocontents|
+% function. It writes the \meta{data} to an external file
+% \meta{jobname}.\meta{datatype}.\meta{data}.
+%    \begin{macrocode}
+\newcommand\adddataline[2]{\addtocontents{#1.data}{#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\getdatalines}
+% The |\getdatalines{|\meta{data type}|}| macro merely retrieves the
+% data of the given type from the external file
+% \meta{jobname}.\meta{datatype}.data.
+%    \begin{macrocode}
+\newcommand\getdatalines[1]{
+  \@input{\jobname.#1.data}
+  \AtEndDocument{
+    \clearpage
+    \if@filesw
+    \expandafter\newwrite\csname tf@#1.data\endcsname
+    \immediate\openout\expandafter\csname tf@#1.data\endcsname%
+    \jobname.#1.data\relax
+    \fi
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \PrintChanges
+% \PrintIndex
+% \Finale
+% \endinput
