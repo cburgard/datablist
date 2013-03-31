@@ -79,7 +79,25 @@
 % function. It writes the \meta{data} to an external file
 % \meta{jobname}.\meta{datatype}.\meta{data}.
 %    \begin{macrocode}
-\newcommand\adddataline[2]{\addtocontents{#1.data}{#2}}
+\def\adddataline#1#2{\expandafter\addtocontents{#1.data}{#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\makedatalines}
+% The |\makedatalines{|\meta{data type}|}| enables writing the data of
+% the given type to the external file
+% \meta{jobname}.\meta{datatype}.data.
+%    \begin{macrocode}
+\def\makedatalines#1{
+  \AtEndDocument{
+    \clearpage
+    \if@filesw
+    \expandafter\newwrite\csname tf@#1.data\endcsname
+    \immediate\openout\expandafter\csname tf@#1.data\endcsname%
+    \jobname.#1.data\relax
+    \fi
+  }
+}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -89,16 +107,8 @@
 % data of the given type from the external file
 % \meta{jobname}.\meta{datatype}.data.
 %    \begin{macrocode}
-\newcommand\getdatalines[1]{
+\def\getdatalines#1{
   \@input{\jobname.#1.data}
-  \AtEndDocument{
-    \clearpage
-    \if@filesw
-    \expandafter\newwrite\csname tf@#1.data\endcsname
-    \immediate\openout\expandafter\csname tf@#1.data\endcsname%
-    \jobname.#1.data\relax
-    \fi
-  }
 }
 %    \end{macrocode}
 % \end{macro}
